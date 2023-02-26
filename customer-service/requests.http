@@ -1,0 +1,17 @@
+POST http://localhost:8081/api/customers
+Content-Type: application/json
+
+{
+  "name": {
+    "firstName": "Mike",
+    "lastName": "Scott"
+  },
+  "phoneNumber": "123456789",
+  "address": {
+    "street1": "Baker Street",
+    "city": "London",
+    "state": "UK",
+    "zipCode": "456798"
+  },
+  "ssn": "789"
+}

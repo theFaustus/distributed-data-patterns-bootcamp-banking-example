@@ -27,7 +27,7 @@ public class AccountEventHandlers {
   }
 
   private void handleCustomerValidatedEvent(DomainEventEnvelope<CustomerValidatedEvent> dee) {
-    throw new RuntimeException("not yet implemented");
+    accountService.noteCustomerValidated(dee.getEvent().getAccountId());
   }
   private void handleCustomerValidationFailedEvent(DomainEventEnvelope<CustomerValidationFailedEvent> dee) {
     accountService.noteCustomerValidationFailed(dee.getEvent().getAccountId());

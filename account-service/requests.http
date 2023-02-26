@@ -1,0 +1,13 @@
+POST http://localhost:8082/api/accounts
+Content-Type: application/json
+
+{
+  "customerId": 14,
+  "name": "Savings",
+  "balance": {
+    "amount": 150
+  }
+}
+
+###
+GET localhost:8082/api/accounts/15
