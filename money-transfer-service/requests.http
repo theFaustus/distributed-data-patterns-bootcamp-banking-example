@@ -1,0 +1,10 @@
+POST http://localhost:8083/api/moneytransfers
+Content-Type: application/json
+
+{
+  "fromAccountId": 2,
+  "toAccountId": 4,
+  "amount": {
+    "amount": 5
+  }
+}
