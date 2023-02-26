@@ -10,43 +10,45 @@ import net.chrisrichardson.bankingexample.customerservice.common.CustomerCreated
 
 public class CustomerViewEventsSubscriber {
 
-  private CustomerViewService customerViewService;
+    private CustomerViewService customerViewService;
 
-  public CustomerViewEventsSubscriber(CustomerViewService customerViewService) {
-    this.customerViewService = customerViewService;
-  }
+    public CustomerViewEventsSubscriber(CustomerViewService customerViewService) {
+        this.customerViewService = customerViewService;
+    }
 
-  public DomainEventHandlers domainEventHandlers() {
-    return DomainEventHandlersBuilder
-            .forAggregateType("net.chrisrichardson.bankingexample.accountservice.backend.Account")
-            .onEvent(AccountOpenedEvent.class, this::handleAccountOpenedEvent)
-            .onEvent(AccountDebitedEvent.class, this::handleAccountDebitedEvent)
-            .onEvent(AccountCreditedEvent.class, this::handleAccountCreditedEvent)
-            .andForAggregateType("net.chrisrichardson.bankingexample.customerservice.backend.Customer")
-            .onEvent(CustomerCreatedEvent.class, this::handleCustomerCreatedEvent)
-            .build();
-  }
+    public DomainEventHandlers domainEventHandlers() {
+        return DomainEventHandlersBuilder
+                .forAggregateType("net.chrisrichardson.bankingexample.accountservice.backend.Account")
+                .onEvent(AccountOpenedEvent.class, this::handleAccountOpenedEvent)
+                .onEvent(AccountDebitedEvent.class, this::handleAccountDebitedEvent)
+                .onEvent(AccountCreditedEvent.class, this::handleAccountCreditedEvent)
+                .andForAggregateType("net.chrisrichardson.bankingexample.customerservice.backend.Customer")
+                .onEvent(CustomerCreatedEvent.class, this::handleCustomerCreatedEvent)
+                .build();
+    }
 
 
-  public void handleCustomerCreatedEvent(DomainEventEnvelope<CustomerCreatedEvent> dee) {
-    customerViewService.createCustomer(dee.getAggregateId(), dee.getEvent().getCustomerInfo());
+    public void handleCustomerCreatedEvent(DomainEventEnvelope<CustomerCreatedEvent> dee) {
+        customerViewService.createCustomer(dee.getAggregateId(), dee.getEvent().getCustomerInfo());
 
-  }
+    }
 
-  public void handleAccountOpenedEvent(DomainEventEnvelope<AccountOpenedEvent> dee) {
-    customerViewService.openAccount(dee.getEventId(), dee.getAggregateId(), dee.getEvent().getAccountInfo());
-  }
+    public void handleAccountOpenedEvent(DomainEventEnvelope<AccountOpenedEvent> dee) {
+        customerViewService.openAccount(dee.getEventId(), dee.getAggregateId(), dee.getEvent().getAccountInfo());
+    }
 
-  public void handleAccountDebitedEvent(DomainEventEnvelope<AccountDebitedEvent> de) {
-    AccountDebitedEvent event = de.getEvent();
-    customerViewService.debitAccount(de.getEventId(), de.getAggregateId(), Long.toString(event.getCustomerId()),
-            event.getAmount(),
-            event.getNewBalance(), event.getTransactionId());
-  }
+    public void handleAccountDebitedEvent(DomainEventEnvelope<AccountDebitedEvent> de) {
+        AccountDebitedEvent event = de.getEvent();
+        customerViewService.debitAccount(de.getEventId(), de.getAggregateId(), Long.toString(event.getCustomerId()),
+                event.getAmount(),
+                event.getNewBalance(), event.getTransactionId());
+    }
 
-  public void handleAccountCreditedEvent(DomainEventEnvelope<AccountCreditedEvent> de) {
-    throw new RuntimeException("not yet implemented");
-  }
+    public void handleAccountCreditedEvent(DomainEventEnvelope<AccountCreditedEvent> de) {
+        AccountCreditedEvent event = de.getEvent();
+        customerViewService.creditAccount(de.getEventId(), de.getAggregateId(), Long.toString(event.getCustomerId()),
+                event.getAmount(), event.getNewBalance(), event.getTransactionId());
+    }
 
 
 }
